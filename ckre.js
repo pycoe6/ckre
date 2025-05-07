@@ -25,8 +25,8 @@ function sendRequest() {
     console.error(`Error for chat_id ${chatId}:`, error);
   });
 
-  chatId--;
-  setTimeout(sendRequest, 5000);
+  chatId++;
+  setTimeout(sendRequest, 1000);
 }
 
 sendRequest();
