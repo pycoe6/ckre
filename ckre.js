@@ -12,21 +12,22 @@ function sendRequest() {
     credentials: 'include',
     body: JSON.stringify({ chat_id: chatId.toString() })
   })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+  .then(async response => {
+    let contentType = response.headers.get('Content-Type') || '';
+    let body;
+    if (contentType.includes('application/json')) {
+      body = await response.json();
+    } else {
+      body = await response.text();
     }
-    return response.json();
-  })
-  .then(data => {
-    console.log(`Response for chat_id ${chatId}:`, data);
+    console.log(`Response (${response.status}) for chat_id ${chatId}:`, body);
   })
   .catch(error => {
-    console.error(`Error for chat_id ${chatId}:`, error);
+    console.error(`Fetch error for chat_id ${chatId}:`, error);
   });
 
   chatId++;
-  setTimeout(sendRequest, 1000);
+  setTimeout(sendRequest, 500);
 }
 
 sendRequest();
