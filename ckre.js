@@ -26,7 +26,7 @@ function sendRequest() {
     console.error(`Fetch error for chat_id ${chatId}:`, error);
   });
 
-  chatId++;
+  chatId+=99;
   setTimeout(sendRequest, 1001);
 }
 
