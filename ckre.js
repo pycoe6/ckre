@@ -4,9 +4,10 @@ if (window.__chatkeeperScannerRunning) {
   window.__chatkeeperScannerRunning = true;
   console.log("✅ Запуск Chatkeeper-сканера");
 
-  let chatId = -1001000000000;
-  const MIN_CHAT_ID = -1003000000000;
-  const MAX_CHAT_ID = -1001000000000;
+  let chatId = -1003000000000; // начинаем с большого chat_id (в верхней части диапазона)
+
+  const MIN_CHAT_ID = -1003000000000; // наименьшее значение (по значению)
+  const MAX_CHAT_ID = -1001000000000; // наименьший модуль (ближе к нулю)
 
   async function sendRequest() {
     try {
@@ -35,14 +36,15 @@ if (window.__chatkeeperScannerRunning) {
       console.error(`❌ Fetch error for chat_id ${chatId}:`, error);
     }
 
-    // Декремент с рандомом
-    chatId -= getRandomStep();
+    // ИДЕМ К БОЛЕЕ НОВЫМ (меньше по модулю), то есть chatId +=
+    chatId += getRandomStep();
 
-    if (chatId < MIN_CHAT_ID || chatId > MAX_CHAT_ID) {
-      chatId = MAX_CHAT_ID - Math.floor(Math.random() * 500000);
+    // если вышли за пределы — сбрасываем
+    if (chatId > MAX_CHAT_ID) {
+      chatId = MIN_CHAT_ID + Math.floor(Math.random() * 500000);
     }
 
-    setTimeout(sendRequest, 1001);
+    setTimeout(sendRequest, 1000);
   }
 
   function getRandomStep() {
