@@ -27,7 +27,7 @@ function sendRequest() {
   });
 
 
-  chatId+=11099;
+  chatId-=1;
   setTimeout(sendRequest, 1001);
 }
 
