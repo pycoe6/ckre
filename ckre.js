@@ -1,11 +1,12 @@
-// Предотвращение повторного запуска
+// Защита от повторного запуска
 if (window.__chatkeeperScannerRunning) {
   console.log("⛔️ Скрипт уже запущен. Второй запуск блокируется.");
 } else {
   window.__chatkeeperScannerRunning = true;
-  console.log("✅ Запуск сканера Chatkeeper");
+  console.log("✅ Запуск Chatkeeper-сканера");
 
   let chatId = -1001000000000;
+  const MIN_CHAT_ID = -1001000000000;
   const MAX_CHAT_ID = -1003000000000;
 
   async function sendRequest() {
@@ -35,13 +36,14 @@ if (window.__chatkeeperScannerRunning) {
       console.error(`❌ Fetch error for chat_id ${chatId}:`, error);
     }
 
-    // Следующий chat_id
+    // Случайный шаг
     chatId += getRandomStep();
-    if (chatId > MAX_CHAT_ID) {
-      chatId = -1001000000000 + Math.floor(Math.random() * 100000);
+
+    // Проверка на выход за допустимые границы
+    if (chatId > MAX_CHAT_ID || chatId < MIN_CHAT_ID) {
+      chatId = MIN_CHAT_ID + Math.floor(Math.random() * 500000); // сброс
     }
 
-    // Повтор через 1 секунду
     setTimeout(sendRequest, 1001);
   }
 
